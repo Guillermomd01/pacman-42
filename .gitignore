@@ -1,2 +1,16 @@
 pac-man.pdf
 .env
+__pycache__/
+*.pyc
+.mypy_cache/
+.venv/
+.uv/
+dist/
+build/
+*.egg-info/
+assets/*.png
+assets/*.jpg
+highscores.json
+.pytest_cache/
+.flake8
+.uv.lock
