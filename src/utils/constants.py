@@ -3,7 +3,7 @@
 from typing import Final
 
 # Window and grid settings
-CELL_SIZE: Final[int] = 30
+CELL_SIZE: Final[int] = 40
 FPS: Final[int] = 60
 WINDOW_TITLE: Final[str] = "Pac-Man"
 
@@ -16,7 +16,7 @@ COLORS: Final[dict[str, tuple[int, int, int]]] = {
     "wall": (33, 33, 222),
     "player": (255, 255, 0),
     "pacgum": (255, 184, 174),
-    "super_pacgum": (255, 184, 174),
+    "super_pacgum": (39, 245, 73),
     "ghost_chase": (255, 0, 0),
     "ghost_frightened": (0, 0, 255),
     "ghost_eyes": (255, 255, 255),
