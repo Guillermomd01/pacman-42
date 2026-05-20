@@ -9,7 +9,7 @@ WINDOW_TITLE: Final[str] = "Pac-Man"
 
 # Timing
 PLAYER_MOVE_INTERVAL_MS: Final[int] = 150  # ms between grid moves
-
+LEVEL_MAX_TIME: Final[int] = 120
 # Colors (RGB)
 COLORS: Final[dict[str, tuple[int, int, int]]] = {
     "background": (0, 0, 0),

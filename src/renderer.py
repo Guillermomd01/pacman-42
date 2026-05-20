@@ -31,7 +31,11 @@ class Renderer:
         Returns:
             Pygame Rect in screen pixels.
         """
-        return pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+        hud_offset = 30
+        return pygame.Rect(
+            x * CELL_SIZE, y * CELL_SIZE + hud_offset,
+            CELL_SIZE, CELL_SIZE
+        )
 
     def _draw_walls(self, grid: List[List[int]],
                     width: int, height: int) -> None:
@@ -149,3 +153,26 @@ class Renderer:
         )
         self._draw_items(level.items)
         self._draw_player(player)
+
+    def _draw_hud(
+        self, score: int, lives: int, level: int,
+        time_left: int
+    ) -> None:
+        """Draw HUD for game"""
+        bar_height = 30
+        bar_rect = pygame.Rect(0, 0, self.screen.get_width(), bar_height)
+        pygame.draw.rect(self.screen, (0, 0, 0), bar_rect)
+        font = pygame.font.SysFont("Arial", 20, bold=True)
+        score_text = font.render(f"Score: {score}", True, COLORS["text"])
+        self.screen.blit(score_text, (10, 5))
+        level_text = font.render(f"Level: {level}", True, COLORS["text"])
+        self.screen.blit(level_text, (200, 5))
+        start_x = 400
+        for i in range(lives):
+            center = (start_x + i * 25, bar_height // 2)
+            pygame.draw.circle(self.screen, COLORS["player"], center, 8)
+        minutes = time_left // 60
+        seconds = time_left % 60
+        time_str = f"{minutes:02d}:{seconds:02d}"
+        time_text = font.render(time_str, True, COLORS["text"])
+        self.screen.blit(time_text, (self.screen.get_width() - 80, 5))
