@@ -3,7 +3,7 @@
 from typing import Final, Tuple
 import pygame
 from level import Level
-GHOST_MOVE_INTERVAL_MS: Final[int] = 90
+GHOST_MOVE_INTERVAL_MS: Final[int] = 600
 
 
 class Ghost:

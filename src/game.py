@@ -38,6 +38,7 @@ class Game:
         self.current_level_index = 0
         self.score = 0
         self.lives = config.get("lives", 3)
+        self.game_started = False
 
         # Cheat modes
         self.ghost_frozen = False
@@ -131,12 +132,16 @@ class Game:
             if event.type == pygame.KEYDOWN and self.player:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     self.player.set_direction("up")
+                    self.game_started = True
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     self.player.set_direction("down")
+                    self.game_started = True
                 elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     self.player.set_direction("left")
+                    self.game_started = True
                 elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     self.player.set_direction("right")
+                    self.game_started = True
                 elif event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
                     self.paused = not self.paused
                 elif event.key == pygame.K_i:
@@ -161,7 +166,7 @@ class Game:
             return
 
         now = pygame.time.get_ticks()
-        if not self.ghost_frozen:
+        if not self.ghost_frozen and self.game_started:
             self.red_ghost.update(self.level, self.player.get_position())
             self.pink_ghost.update(self.level, self.player.get_position())
             self.blue_ghost.update(self.level, self.player.get_position())
