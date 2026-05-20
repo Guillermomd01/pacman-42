@@ -43,7 +43,7 @@ class Renderer:
             height: Maze height in cells.
         """
         wall_color = COLORS["wall"]
-        thickness = 2
+        thickness = 6
         for y in range(height):
             for x in range(width):
                 cell = grid[y][x]
