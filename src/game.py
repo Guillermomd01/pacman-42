@@ -10,7 +10,9 @@ from level import Level
 from maze_loader import load_level
 from entities.player import Player
 from renderer import Renderer
-from utils.constants import CELL_SIZE, FPS, PLAYER_MOVE_INTERVAL_MS, WINDOW_TITLE
+from utils.constants import (
+    CELL_SIZE, FPS, PLAYER_MOVE_INTERVAL_MS, WINDOW_TITLE, LEVEL_MAX_TIME
+)
 from entities.ghost import Ghost
 FRIGHTENED_DURATION_MS = 7000
 
@@ -39,6 +41,7 @@ class Game:
         self.score = 0
         self.lives = config.get("lives", 3)
         self.game_started = False
+        self.level_start_time = pygame.time.get_ticks()
 
         # Cheat modes
         self.ghost_frozen = False
@@ -60,6 +63,7 @@ class Game:
             sys.exit(1)
 
         level_cfg = levels_config[self.current_level_index]
+        hud_height = 80
         width = level_cfg.get("width", 21)
         height = level_cfg.get("height", 21)
         seed = self.config.get("seed", 42)
@@ -102,7 +106,7 @@ class Game:
         )
 
         window_width = data.width * CELL_SIZE
-        window_height = data.height * CELL_SIZE
+        window_height = data.height * CELL_SIZE + hud_height
         self.screen = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption(WINDOW_TITLE)
         self.clock = pygame.time.Clock()
@@ -166,6 +170,11 @@ class Game:
             return
 
         now = pygame.time.get_ticks()
+        remaining = LEVEL_MAX_TIME - (now - self.level_start_time) // 1000
+        if remaining <= 0:
+            print(f"Time's up! Final Score: {self.score}")
+            self.running = False
+            return
         if not self.ghost_frozen and self.game_started:
             self.red_ghost.update(self.level, self.player.get_position())
             self.pink_ghost.update(self.level, self.player.get_position())
@@ -268,4 +277,21 @@ class Game:
             self.renderer._draw_ghost(self.pink_ghost)
             self.renderer._draw_ghost(self.blue_ghost)
             self.renderer._draw_ghost(self.orange_ghost)
+            time_left = self._get_time_left()
+            self.renderer._draw_hud(
+                self.score, self.lives,
+                self.current_level_index + 1,
+                time_left
+            )
             pygame.display.flip()
+
+    def _get_time_left(self) -> int:
+        """Calculate remaining time for the current level.
+
+        Returns:
+            Remaining time in seconds.
+        """
+        now = pygame.time.get_ticks()
+        elapsed_seconds = (now - self.level_start_time) // 1000
+        remaining = max(0, LEVEL_MAX_TIME - elapsed_seconds)
+        return remaining
