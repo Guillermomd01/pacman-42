@@ -13,4 +13,6 @@ assets/*.jpg
 highscores.json
 .pytest_cache/
 .flake8
-.uv.lock
+uv.lock
+tests/
+capture_game.py
